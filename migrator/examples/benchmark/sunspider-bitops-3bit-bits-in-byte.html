@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title></title>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="/migrator/migrator.php?app=benchmark_bitops_3bit_bits_in_byte"></script>
+	<script type="text/javascript" >
+
+function startTest(){};	
+function test(s,f){f();};
+function prep(f){f();};
+function endTest(){};
+
+// Copyright (c) 2004 by Arthur Langereis (arthur_ext at domain xfinitegames, tld com
+
+// 1 op = 6 ANDs, 3 SHRs, 3 SHLs, 4 assigns, 2 ADDs
+// O(1)
+function fast3bitlookup(b) {
+var c, bi3b = 0xE994; // 0b1110 1001 1001 0100; // 3 2 2 1  2 1 1 0
+c  = 3 & (bi3b >> ((b << 1) & 14));
+c += 3 & (bi3b >> ((b >> 2) & 14));
+c += 3 & (bi3b >> ((b >> 5) & 6));
+return c;
+
+/*
+lir4,0xE994; 9 instructions, no memory access, minimal register dependence, 6 shifts, 2 adds, 1 inline assign
+rlwinmr5,r3,1,28,30
+rlwinmr6,r3,30,28,30
+rlwinmr7,r3,27,29,30
+rlwnmr8,r4,r5,30,31
+rlwnmr9,r4,r6,30,31
+rlwnmr10,r4,r7,30,31
+addr3,r8,r9
+addr3,r3,r10
+*/
+}
+
+
+function TimeFunc(func) {
+var x, y, t;
+for(var x=0; x<250; x++)
+for(var y=0; y<256; y++) func(y);
+}
+
+function runTest(){ startTest("sunspider-bitops-3bit-bits-in-byte", '3664f684');
+
+		test("3bit bits in byte", function(){
+			TimeFunc(fast3bitlookup);
+		});
+
+		endTest(); 
+};
+	</script>
+
+</head>
+<body>
+	<h2 id='title1'>SunSpider Compute Bits in Byte Test</h2><br/>
+	<button class="run1" style="display:block;margin-top:40px;height:40px;width:150px;font-size:20px;" >Start Test</button><label id="label1" style="display:auto;"></label><br/>
+	
+	<script type="text/javascript" >
+		$(".run1").click(function(event){
+				var startTime=new Date().getTime();
+				runTest();
+				var timeConsume=new Date().getTime()-startTime;
+				document.getElementById("label1").innerHTML="Time Consuming:"+timeConsume.toString()+"ms";
+		});
+		$('title').html($("#title1").html());
+	</script>
+
+</body></html>
+

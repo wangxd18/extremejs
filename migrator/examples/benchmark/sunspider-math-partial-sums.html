@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title></title>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="/migrator/migrator.php?app=benchmark_math_partial_sums"></script>
+	<script type="text/javascript" >
+
+function startTest(){};	
+function test(s,f){f();};
+function prep(f){f();};
+function endTest(){};
+
+// The Computer Language Shootout
+// http://shootout.alioth.debian.org/
+// contributed by Isaac Gouy
+
+function partial(n){
+	var a1 = a2 = a3 = a4 = a5 = a6 = a7 = a8 = a9 = 0.0;
+	var twothirds = 2.0/3.0;
+	var alt = -1.0;
+	var k2 = k3 = sk = ck = 0.0;
+	
+	for (var k = 1; k <= n; k++){
+		k2 = k*k;
+		k3 = k2*k;
+		sk = Math.sin(k);
+		ck = Math.cos(k);
+		alt = -alt;
+		
+		a1 += Math.pow(twothirds,k-1);
+		a2 += Math.pow(k,-0.5);
+		a3 += 1.0/(k*(k+1.0));
+		a4 += 1.0/(k3 * sk*sk);
+		a5 += 1.0/(k3 * ck*ck);
+		a6 += 1.0/k;
+		a7 += 1.0/k2;
+		a8 += alt/k;
+		a9 += alt/(2*k -1);
+	}
+}
+
+function runTest(){startTest("sunspider-math-partial-sums", 'a31c1c44');
+
+	test( "Partial Sums", function(){
+		partial(2048);
+	});
+	endTest();
+
+};
+	</script>
+
+</head>
+<body>
+	<h2 id='title1'>SunSpider Partial Sum Calculation Test</h2><br/>
+	<button class="run1" style="display:block;margin-top:40px;height:40px;width:150px;font-size:20px;" >Start Test</button><label id="label1" style="display:auto;"></label><br/>
+	
+	<script type="text/javascript" >
+		$(".run1").click(function(event){
+				var startTime=new Date().getTime();
+				runTest();
+				var timeConsume=new Date().getTime()-startTime;
+				document.getElementById("label1").innerHTML="Time Consuming:"+timeConsume.toString()+"ms";
+		});
+		$('title').html($("#title1").html());
+	</script>
+
+</body></html>
+	

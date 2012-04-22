@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title></title>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="/migrator/migrator.php?app=benchmark_controlflow_recursive"></script>
+	<script type="text/javascript" >
+
+function startTest(){};	
+function test(s,f){f();};
+function prep(f){f();};
+function endTest(){};
+
+// The Computer Language Shootout
+// http://shootout.alioth.debian.org/
+// contributed by Isaac Gouy
+
+function ack(m,n){
+   if (m==0) { return n+1; }
+   if (n==0) { return ack(m-1,1); }
+   return ack(m-1, ack(m,n-1) );
+}
+
+function fib(n) {
+    if (n < 2){ return 1; }
+    return fib(n-2) + fib(n-1);
+}
+
+function tak(x,y,z) {
+	if (y >= x) return z;
+	return tak(tak(x-1,y,z), tak(y-1,z,x), tak(z-1,x,y));
+}
+
+
+
+function runTest(){ startTest("sunspider-controlflow-recursive", '558ed308');
+	var a,f,t;
+
+	test("Ack", function(){
+		for ( var i = 3; i <= 5; i++ )
+			a = ack(3,i);
+	});
+	
+	test("Fib", function(){
+		for ( var i = 3; i <= 5; i++ )
+			f = fib(17.0+i);
+	});
+	
+	test("Tak", function(){
+		for ( var i = 3; i <= 5; i++ )
+			t = tak(3*i+3,2*i+2,i+1);
+	});
+
+	endTest();
+//	return [a,f,t];
+};
+	</script>
+
+</head>
+<body>
+	<h2 id='title1'>SunSpider Recursive Number Calculation Test</h2><br/>
+	<button class="run1" style="display:block;margin-top:40px;height:40px;width:150px;font-size:20px;" >Start Test</button><label id="label1" style="display:auto;"></label><br/>
+	
+	<script type="text/javascript" >
+		$(".run1").click(function(event){
+				var startTime=new Date().getTime();
+				runTest();
+				var timeConsume=new Date().getTime()-startTime;
+				document.getElementById("label1").innerHTML="Time Consuming:"+timeConsume.toString()+"ms";
+		});
+		$('title').html($("#title1").html());
+	</script>
+
+</body></html>
+	

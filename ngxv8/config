@@ -1,0 +1,6 @@
+ngx_addon_name=ngx_http_v8_module
+HTTP_MODULES="$HTTP_MODULES ngx_http_v8_embed_module"
+NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/ngx_http_v8_embed_module.cpp"
+CORE_INCS="/home/carl/pkgs/v8/include $CORE_INCS"
+CORE_LIBS="-L/home/carl/pkgs/v8 -lv8 -lstdc++ -ldl $CORE_LIBS"
+

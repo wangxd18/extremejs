@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title></title>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="/migrator/migrator.php?app=benchmark_bitops_nsieve_bits"></script>
+	<script type="text/javascript" >
+
+function startTest(){};	
+function test(s,f){f();};
+function prep(f){f();};
+function endTest(){};
+
+// The Great Computer Language Shootout
+//  http://shootout.alioth.debian.org
+//
+//  Contributed by Ian Osgood
+
+function pad(n,width) {
+  var s = n.toString();
+  while (s.length < width) s = ' ' + s;
+  return s;
+}
+
+function primes(isPrime, n) {
+  var i, count = 0, m = 10000<<n, size = m+31>>5;
+
+  for (i=0; i<size; i++) isPrime[i] = 0xffffffff;
+
+  for (i=2; i<m; i++)
+    if (isPrime[i>>5] & 1<<(i&31)) {
+      for (var j=i+i; j<m; j+=i)
+        isPrime[j>>5] &= ~(1<<(j&31));
+      count++;
+    }
+	return count;
+}
+
+function runTest(){ startTest("sunspider-bitops-nsieve-bits", '35973a6b');
+	var i = 2, count = 0;
+	test( "N-Sieve Bits", function(){
+		var isPrime = new Array((10000<<i)+31>>5);
+		count = primes(isPrime, i);
+	});
+//	return count;
+};
+	</script>
+
+</head>
+<body>
+	<h2 id='title1'>SunSpider Prime Number Computation (2) Test</h2><br/>
+	<button class="run1" style="display:block;margin-top:40px;height:40px;width:150px;font-size:20px;" >Start Test</button><label id="label1" style="display:auto;"></label><br/>
+	
+	<script type="text/javascript" >
+		$(".run1").click(function(event){
+				var startTime=new Date().getTime();
+				runTest();
+				var timeConsume=new Date().getTime()-startTime;
+				document.getElementById("label1").innerHTML="Time Consuming:"+timeConsume.toString()+"ms";
+		});
+		$('title').html($("#title1").html());
+	</script>
+
+</body></html>
+	

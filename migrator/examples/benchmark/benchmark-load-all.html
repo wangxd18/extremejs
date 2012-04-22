@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title></title>
+			<style type="text/css">
+			body {font-family:arial;}
+			div.center {text-align: center;margin:auto;}
+			iframe.hide {display:none;}
+			button {height:24px}
+			input#offloading { margin-bottom:20px; }
+			</style>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="js/profile.js"></script>
+	<script type="text/javascript" src="/migrator/profiler/upload.js"></script>
+	<script type="text/javascript" >
+	
+	// Migrate or not 
+	var MIGRATION_FLAG = true;
+	var last_flag=true;
+
+	var Pages=['dromaeo-3d-cube.html','dromaeo-core-eval.html','dromaeo-object-array.html','dromaeo-object-regexp.html','dromaeo-object-string.html','dromaeo-string-base64.html','sunspider-3d-morph.html','sunspider-3d-raytrace.html','sunspider-access-binary-trees.html','sunspider-access-fannkuch.html','sunspider-access-nbody.html','sunspider-access-nsieve.html','sunspider-bitops-3bit-bits-in-byte.html','sunspider-bitops-bits-in-byte.html','sunspider-bitops-bitwise-and.html','sunspider-bitops-nsieve-bits.html','sunspider-controlflow-recursive.html','sunspider-crypto-aes.html','sunspider-crypto-md5.html','sunspider-crypto-sha1.html','sunspider-date-format-tofte.html','sunspider-date-format-xparb.html','sunspider-math-cordic.html','sunspider-math-partial-sums.html','sunspider-math-spectral-norm.html','sunspider-regexp-dna.html','sunspider-string-fasta.html','sunspider-string-tagcloud.html','sunspider-string-unpack-code.html','sunspider-string-validate-input.html','v8-crypto.html','v8-deltablue.html','v8-earley-boyer.html','v8-raytrace.html','v8-richards.html'];
+//	var Pages=['dromaeo-3d-cube.html','v8-richards.html'];	
+	
+	var profileInfo = new Profile();
+	var localProfileInfo = new Profile();
+	
+	function displayStatistics(){
+		var profiler =  MIGRATION_FLAG ? window.profileInfo : window.localProfileInfo;
+        var strArray = [];
+		strArray.push('TOTAL TIME CONSUMING: '+totalTimeConsume+'ms.');
+        strArray.push('all: '+profiler.totalStatistics());
+        strArray.push('dromaeo: ' + profiler.filterStatistics(function(name,data){
+                    return name.indexOf('dromaeo') === 0;
+                    }));
+        strArray.push('sunspider: ' + profiler.filterStatistics(function(name,data){
+                    return name.indexOf('sunspider') === 0;
+                    }));
+        strArray.push('v8: ' + profiler.filterStatistics(function(name,data){
+                    return name.indexOf('v8') === 0;
+                    }));
+
+        //strArray.push(profiler.detailStatistics(true));
+		$('#dataArea').html(strArray.join('<br/><br/>'));
+
+        //upload profile data
+        if(needUploadStatistics ){ // && confirm('Want to upload Statistics data?')){
+            var domain = '192.168.1.239';
+            uploadProfilerData(domain,'benchmark',MIGRATION_FLAG,profiler.getDataArray(),function(msg){
+                    $('#dataArea').html( $('#dataArea').html() + '<br/><br/>All Statistics upload status:'+msg );
+                    });
+            uploadProfilerData(domain,'benchmark-dromaeo',MIGRATION_FLAG,profiler.getDataArray(function(name,data){
+                        return name.indexOf('dromaeo') === 0;
+                    }),
+                    function(msg){
+                        $('#dataArea').html( $('#dataArea').html() + '<br/>dromaeo Statistics upload status:'+msg );
+                    });
+            uploadProfilerData(domain,'benchmark-sunspider',MIGRATION_FLAG,profiler.getDataArray(function(name,data){
+                        return name.indexOf('sunspider') === 0;
+                    }),
+                    function(msg){
+                        $('#dataArea').html( $('#dataArea').html() + '<br/>sunspider Statistics upload status:'+msg );
+                    });
+            uploadProfilerData(domain,'benchmark-v8',MIGRATION_FLAG,profiler.getDataArray(function(name,data){
+                        return name.indexOf('v8') === 0;
+                    }),
+                    function(msg){
+                        $('#dataArea').html( $('#dataArea').html() + '<br/>v8 Statistics upload status:'+msg );
+                    });
+        }
+	}
+
+	</script>
+
+</head>
+<body>
+	<div class='center'>
+	<h2 id='title1'>Dromaeo  JavaScript Performance Testing (2)</h2>
+	<input id='offloading' type='checkbox' checked="yes"> Offloading ON </input>
+	<div width=160 align='center'><button class="run1" align='center' style="display:block;height:40px;width:150px;font-size:20px;" disabled>Loading</button></div>
+	<label id="label0" style="display:auto;"></label><br/>
+	<label id="label1" style="display:auto;"></label><br/>
+	<p id='dataArea'>
+	</p>
+	</div>
+<iframe class='hide' src='dromaeo-3d-cube.html'></iframe>
+<iframe class='hide' src='dromaeo-core-eval.html'></iframe>
+<iframe class='hide' src='dromaeo-object-array.html'></iframe>
+<iframe class='hide' src='dromaeo-object-regexp.html'></iframe>
+<iframe class='hide' src='dromaeo-object-string.html'></iframe>
+<iframe class='hide' src='dromaeo-string-base64.html'></iframe>
+<iframe class='hide' src='sunspider-3d-morph.html'></iframe>
+<iframe class='hide' src='sunspider-3d-raytrace.html'></iframe>
+<iframe class='hide' src='sunspider-access-binary-trees.html'></iframe>
+<iframe class='hide' src='sunspider-access-fannkuch.html'></iframe>
+<iframe class='hide' src='sunspider-access-nbody.html'></iframe>
+<iframe class='hide' src='sunspider-access-nsieve.html'></iframe>
+<iframe class='hide' src='sunspider-bitops-3bit-bits-in-byte.html'></iframe>
+<iframe class='hide' src='sunspider-bitops-bits-in-byte.html'></iframe>
+<iframe class='hide' src='sunspider-bitops-bitwise-and.html'></iframe>
+<iframe class='hide' src='sunspider-bitops-nsieve-bits.html'></iframe>
+<iframe class='hide' src='sunspider-controlflow-recursive.html'></iframe>
+<iframe class='hide' src='sunspider-crypto-aes.html'></iframe>
+<iframe class='hide' src='sunspider-crypto-md5.html'></iframe>
+<iframe class='hide' src='sunspider-crypto-sha1.html'></iframe>
+<iframe class='hide' src='sunspider-date-format-tofte.html'></iframe>
+<iframe class='hide' src='sunspider-date-format-xparb.html'></iframe>
+<iframe class='hide' src='sunspider-math-cordic.html'></iframe>
+<iframe class='hide' src='sunspider-math-partial-sums.html'></iframe>
+<iframe class='hide' src='sunspider-math-spectral-norm.html'></iframe>
+<iframe class='hide' src='sunspider-regexp-dna.html'></iframe>
+<iframe class='hide' src='sunspider-string-fasta.html'></iframe>
+<iframe class='hide' src='sunspider-string-tagcloud.html'></iframe>
+<iframe class='hide' src='sunspider-string-unpack-code.html'></iframe>
+<iframe class='hide' src='sunspider-string-validate-input.html'></iframe>
+<iframe class='hide' src='v8-crypto.html'></iframe>
+<iframe class='hide' src='v8-deltablue.html'></iframe>
+<iframe class='hide' src='v8-earley-boyer.html'></iframe>
+<iframe class='hide' src='v8-raytrace.html'></iframe>
+<iframe class='hide' src='v8-richards.html'></iframe>
+
+	<script type="text/javascript" >
+	var totalTest = Pages.length;
+    var needUploadStatistics = true;    // upload statistics
+    var autoRunTest = true;             //autorun test
+	var $iframes = $('iframe.hide');
+
+
+	var tenTimes = false;
+
+	var runTestIframe = function(repeatTenTimes){
+		var testName = '',i;
+		totalStartTime = new Date().getTime();
+		var repeatTimes = repeatTenTimes? 10:1;
+		for( var repeatIterator=1; repeatIterator<=repeatTimes; repeatIterator++ ){
+			$('#label0').html(repeatIterator+' time.');
+			for( i=0;i<totalTest; i++ ) {
+				$('#label1').html(i+' out of '+totalTest+' done.');
+				if(typeof window.frames[i].runTest != 'undefined'){
+					if( MIGRATION_FLAG ){
+						window.frames[i].runTest();
+						testName = window.Pages[i].substring(0,window.Pages[i].lastIndexOf('.html'));
+						window.profileInfo.addTestData(testName,window.frames[i].Migrator.profileInfo.timeArray,window.frames[i].Migrator.profileInfo.variableArray);
+					}
+					else{
+						var startTime=new Date().getTime();
+						window.frames[i].runTest();
+						var timeConsume=new Date().getTime()-startTime;
+						testName = window.Pages[i].substring(0,window.Pages[i].lastIndexOf('.html'));
+						window.localProfileInfo.addTestData(testName,{T:[timeConsume],C:[timeConsume],S:[0],N:[0]},{D:[0],OBJ:[0],CTX:[0]});
+					}
+				}
+			}
+			if( i == totalTest )
+				$('#label1').html(i+' out of '+totalTest+' done.');
+			if(i == totalTest && repeatIterator==repeatTimes){
+				totalTimeConsume = new Date().getTime()-totalStartTime;
+	//			$('#label0').html('');
+				displayStatistics();
+			}
+		}
+	};
+
+	function reloadIframe(MigrationFlag){
+		window.MIGRATION_FLAG = typeof MigrationFlag!='undefined' ? MigrationFlag : true;
+		$(".run1").attr('disabled','disabled').html('Reloading');
+		checkIframeReadyInterval = setInterval(checkIframeReady,100);
+		for(var i =0;i<$iframes.length;i++){
+			$iframes[i].contentDocument.location.reload(true);
+		}
+	}
+    var testStep = ['$(".run1").click()'];//,'reloadIframe(false)','$(".run1").click()'];
+    function runTestStep(index){
+       	if(index >= testStep.length)
+  			return;
+		eval(testStep[index]);
+		setTimeout('runTestStep('+(index+1)+')',500);
+	}
+    function checkIframeReady(){
+		for(var i =0;i<$iframes.length;i++){
+			if(typeof window.frames[i].__MIGRATOR__STATE__=='undefined' || window.frames[i].__MIGRATOR__STATE__ !== 'ready')
+			return;
+		}
+		$(".run1").removeAttr('disabled').html('Start Test');
+		clearInterval(checkIframeReadyInterval);
+        if(autoRunTest){
+		    runTestStep(0);
+        }
+	}
+
+	$(".run1").click(function(event){
+		$(".run1").attr('disabled','disabled').html('Running');
+		runTestIframe(tenTimes);
+		$(".run1").removeAttr('disabled').html('Start Test');
+	});
+	
+	$('#offloading').click(function(event){
+		reloadIframe($('#offloading')[0].checked);
+	});
+	$('title').html($("#title1").html());
+	$(document).ready(function(){
+		checkIframeReadyInterval = setInterval(checkIframeReady,100);
+	});
+	
+	</script>
+
+</body></html>
+

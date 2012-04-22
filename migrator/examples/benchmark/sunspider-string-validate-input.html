@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title></title>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="/migrator/migrator.php?app=benchmark_string_validate_input"></script>
+	<script type="text/javascript" >
+
+function startTest(){};	
+function test(s,f){f();};
+function prep(f){f();};
+function endTest(){};
+
+var letters = new Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z");
+var numbers = new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26);
+var colors  = new Array("FF","CC","99","66","33","00");
+
+var endResult;
+
+function testEmail()
+{
+   endResult = "";
+   var r;
+
+   // make up email address
+   for (var k=0;k<2000;k++)
+   {
+      var name = makeName(6);
+      var email = (k%2)?name+"@mac.com":name+"(at)mac.com";
+
+      // validate the email address
+      var pattern = /^[a-zA-Z0-9\-\._]+@[a-zA-Z0-9\-_]+(\.?[a-zA-Z0-9\-_]*)\.[a-zA-Z]{2,3}$/;
+
+      if(pattern.test(email))
+      {
+         r = email + " appears to be a valid email address.";
+         addResult(r);
+      }
+      else
+      {
+         r = email + " does NOT appear to be a valid email address.";
+         addResult(r);
+      }
+   }
+}
+
+function testZip()
+{
+   endResult = "";
+   var r;
+
+   // make up ZIP codes
+   for (var s=0;s<2000;s++)
+   {
+      var zipGood = true;
+      var zip = makeNumber(4);
+      (s%2)?zip=zip+"xyz":zip=zip.concat("7");
+
+      // validate the zip code
+      for (var i = 0; i < zip.length; i++) {
+          var ch = zip.charAt(i);
+          if (ch < "0" || ch > "9") {
+              zipGood = false;
+              r = zip + " contains letters.";
+              addResult(r);
+          }
+      }
+      if (zipGood && zip.length>5)
+      {
+         zipGood = false;
+         r = zip + " is longer than five characters.";
+         addResult(r);
+      }
+      if (zipGood)
+      {
+         r = zip + " appears to be a valid ZIP code.";
+         addResult(r);
+      }
+   }
+}
+
+function makeName(n)
+{
+   var tmp = "";
+   for (var i=0;i<n;i++)
+   {
+      var l = Math.floor(26*Math.random());
+      tmp += letters[l];
+   }
+   return tmp;
+}
+
+function makeNumber(n)
+{
+   var tmp = "";
+   for (var i=0;i<n;i++)
+   {
+      var l = Math.floor(9*Math.random());
+      tmp = tmp.concat(l);
+   }
+   return tmp;
+}
+
+function addResult(r)
+{
+   endResult += "\n" + r;
+}
+
+function runTest(){ startTest("sunspider-string-validate-input", '7e409a49');
+
+	test("Validate Email Input", testEmail);
+	test("Validate Zipcode Input", testZip);
+
+	endTest();
+//	return endResult;
+};
+
+	</script>
+
+</head>
+<body>
+	<h2 id='title1'>SunSpider Validate User Input Test</h2><br/>
+	<button class="run1" style="display:block;margin-top:40px;height:40px;width:150px;font-size:20px;" >Start Test</button><label id="label1" style="display:auto;"></label><br/>
+	
+	<script type="text/javascript" >
+		$(".run1").click(function(event){
+				var startTime=new Date().getTime();
+				runTest();
+				var timeConsume=new Date().getTime()-startTime;
+				document.getElementById("label1").innerHTML="Time Consuming:"+timeConsume.toString()+"ms";
+		});
+		$('title').html($("#title1").html());
+	</script>
+
+</body></html>
+

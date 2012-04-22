@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title>Dromaeo Code Evaluation Test</title>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="/migrator/migrator.php?app=benchmark_eval"></script>
+	<script type="text/javascript" >
+
+function runTest(){
+
+// Try to force real results
+var ret, tmp;
+
+// The commands that we'll be evaling
+var cmd = 'var str="";for(var i=0;i<1000;i++){str += "a";}ret = str;';
+
+// TESTS: eval()
+var num = 4;
+	tmp = cmd;
+	for ( var n = 0; n < num; n++ )
+		tmp += tmp;
+	eval(tmp);
+	(new Function(tmp))();
+};
+
+	</script>
+
+</head>
+<body>
+	<h2>Dromaeo Code Evaluation Test</h2><br/>
+	<button class="run1" style="display:block;margin-top:40px;height:40px;width:150px;font-size:20px;" >Start Test</button><label id="label1" style="display:auto;"></label><br/>
+	
+	<script type="text/javascript" >
+		$(".run1").click(function(event){
+				var startTime=new Date().getTime();
+				runTest();
+				var timeConsume=new Date().getTime()-startTime;
+				document.getElementById("label1").innerHTML="Time Consuming:"+timeConsume.toString()+"ms";
+		});
+
+	</script>
+
+</body></html>
+

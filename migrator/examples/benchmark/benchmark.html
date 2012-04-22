@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title></title>
+			<style type="text/css">
+			body {font-family:arial;}
+			div.center {text-align: center;margin:auto;}
+			button {height:24px}
+			input#offloading { margin-bottom:20px; }
+			</style>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="js/profile.js"></script>
+	<script type="text/javascript" src="/migrator/profiler/upload.js"></script>
+	<script type="text/javascript" >
+	
+	// Migrate or not 
+	var MIGRATION_FLAG = true;
+
+	var Pages=['dromaeo-3d-cube.html','dromaeo-core-eval.html','dromaeo-object-array.html','dromaeo-object-regexp.html','dromaeo-object-string.html','dromaeo-string-base64.html','sunspider-3d-morph.html','sunspider-3d-raytrace.html','sunspider-access-binary-trees.html','sunspider-access-fannkuch.html','sunspider-access-nbody.html','sunspider-access-nsieve.html','sunspider-bitops-3bit-bits-in-byte.html','sunspider-bitops-bits-in-byte.html','sunspider-bitops-bitwise-and.html','sunspider-bitops-nsieve-bits.html','sunspider-controlflow-recursive.html','sunspider-crypto-aes.html','sunspider-crypto-md5.html','sunspider-crypto-sha1.html','sunspider-date-format-tofte.html','sunspider-date-format-xparb.html','sunspider-math-cordic.html','sunspider-math-partial-sums.html','sunspider-math-spectral-norm.html','sunspider-regexp-dna.html','sunspider-string-fasta.html','sunspider-string-tagcloud.html','sunspider-string-unpack-code.html','sunspider-string-validate-input.html','v8-crypto.html','v8-deltablue.html','v8-earley-boyer.html','v8-raytrace.html','v8-richards.html'];
+//	var Pages=['dromaeo-core-eval.html','sunspider-string-tagcloud.html'];	
+
+	var profileInfo = new Profile();
+	var localProfileInfo = new Profile();
+
+	function displayStatistics(){
+		var profiler =  MIGRATION_FLAG ? window.profileInfo : window.localProfileInfo;
+        var strArray = [];
+		strArray.push('TOTAL TIME CONSUMING: '+totalTimeConsume+'ms.');
+        strArray.push('all: '+profiler.totalStatistics());
+        strArray.push('dromaeo: ' + profiler.filterStatistics(function(name,data){
+                    return name.indexOf('dromaeo') === 0;
+                    }));
+        strArray.push('sunspider: ' + profiler.filterStatistics(function(name,data){
+                    return name.indexOf('sunspider') === 0;
+                    }));
+        strArray.push('v8: ' + profiler.filterStatistics(function(name,data){
+                    return name.indexOf('v8') === 0;
+                    }));
+
+        //strArray.push(profiler.detailStatistics(true));
+		$('#dataArea').html(strArray.join('<br/><br/>'));
+
+        //upload profile data
+        if(needUploadStatistics){ // && confirm('Want to upload Statistics data?')){
+            var domain = '192.168.1.239';
+            uploadProfilerData(domain,'benchmark',MIGRATION_FLAG,profiler.getDataArray(),function(msg){
+                    $('#dataArea').html( $('#dataArea').html() + '<br/><br/>All Statistics upload status:'+msg );
+                    });
+            uploadProfilerData(domain,'benchmark-dromaeo',MIGRATION_FLAG,profiler.getDataArray(function(name,data){
+                        return name.indexOf('dromaeo') === 0;
+                    }),
+                    function(msg){
+                        $('#dataArea').html( $('#dataArea').html() + '<br/>dromaeo Statistics upload status:'+msg );
+                    });
+            uploadProfilerData(domain,'benchmark-sunspider',MIGRATION_FLAG,profiler.getDataArray(function(name,data){
+                        return name.indexOf('sunspider') === 0;
+                    }),
+                    function(msg){
+                        $('#dataArea').html( $('#dataArea').html() + '<br/>sunspider Statistics upload status:'+msg );
+                    });
+            uploadProfilerData(domain,'benchmark-v8',MIGRATION_FLAG,profiler.getDataArray(function(name,data){
+                        return name.indexOf('v8') === 0;
+                    }),
+                    function(msg){
+                        $('#dataArea').html( $('#dataArea').html() + '<br/>v8 Statistics upload status:'+msg );
+                    });
+        }
+	}
+
+	</script>
+
+</head>
+<body>
+	<div class='center'>
+	<h2 id='title1'>Dromaeo  JavaScript Performance Testing</h2>
+	<input id='offloading' type='checkbox' checked="yes"> Offloading ON </input>
+	<div width=160 align='center'><button class="run1" align='center' style="display:block;height:40px;width:150px;font-size:20px;" >Start Test</button></div>
+	<label id="label1" style="display:auto;"></label><br/>
+	<p id='dataArea'>
+	</p>
+	</div>
+	<iframe id="iframe1" src="" width="1" height="1" style='display:none'></iframe> 
+	<script type="text/javascript" >
+	var totalTest = Pages.length;
+    var needUploadStatistics = true;
+	var $iframe = $('#iframe1');
+
+	var pageIndex;
+
+	var runTestIframe = function(){
+		var testName = '';
+		if(typeof window.frames[0].runTest != 'undefined'){
+			if( MIGRATION_FLAG ){
+				window.frames[0].runTest();
+				testName = window.Pages[pageIndex].substring(0,window.Pages[pageIndex].lastIndexOf('.html'));
+				window.profileInfo.addTestData(testName,window.frames[0].Migrator.profileInfo.timeArray,window.frames[0].Migrator.profileInfo.variableArray);
+			}
+			else{
+				var startTime=new Date().getTime();
+				window.frames[0].runTest();
+				var timeConsume=new Date().getTime()-startTime;
+				testName = window.Pages[pageIndex].substring(0,window.Pages[pageIndex].lastIndexOf('.html'));
+				window.localProfileInfo.addTestData(testName,{T:[timeConsume],C:[timeConsume],S:[0],N:[0]},{D:[0],OBJ:[0],CTX:[0]});
+			}
+		}
+		pageIndex ++;
+		if(pageIndex <= totalTest)
+			loadIframe();
+		if(pageIndex == totalTest){
+			$iframe.attr('src','');
+			totalTimeConsume = new Date().getTime()-totalStartTime;
+			displayStatistics();
+			$(".run1").removeAttr('disabled');
+			$(".run1").html('Start Test');
+		}
+	};
+	
+	var checkIframeFunctionReadyInterval;
+	function checkIframeFunctionReady(){
+		if( typeof window.frames[0].__MIGRATOR__STATE__!='undefined' && window.frames[0].__MIGRATOR__STATE__ === 'ready'){
+			clearInterval(checkIframeFunctionReadyInterval);
+			runTestIframe();
+		}
+		else{
+//			console.log('window.frames[0].Migrator.state: '+window.frames[0].__MIGRATOR__STATE__);
+		}
+	}
+
+	function loadIframe(){
+		if( pageIndex < totalTest ){
+			$iframe.ready(function(){
+				// check migration ready
+				setTimeout("checkIframeFunctionReadyInterval = setInterval(checkIframeFunctionReady, 20);",50);
+			});
+
+			$iframe.attr('src',Pages[pageIndex]);
+		}
+		$('#label1').html((pageIndex)+' out of '+totalTest+' done.');
+	}
+
+	function loadBenchmark(MigrationFlag){
+		totalStartTime = new Date().getTime();
+		window.MIGRATION_FLAG = typeof MigrationFlag!='undefined' ? MigrationFlag : true;
+		pageIndex=0;
+		loadIframe();
+	}
+
+	$(".run1").click(function(event){
+		$(".run1").attr('disabled','disabled');
+		$(".run1").html('Running');
+		loadBenchmark($('#offloading')[0].checked);
+	});
+	$('title').html($("#title1").html());
+	
+	</script>
+
+</body></html>
+

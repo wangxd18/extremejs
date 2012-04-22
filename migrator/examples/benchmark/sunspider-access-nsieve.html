@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title></title>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="/migrator/migrator.php?app=benchmark_access_nsieve"></script>
+	<script type="text/javascript" >
+
+function startTest(){};	
+function test(s,f){f();};
+function prep(f){f();};
+function endTest(){};
+
+// The Great Computer Language Shootout
+// http://shootout.alioth.debian.org/
+//
+// modified by Isaac Gouy
+
+function pad(number,width){
+   var s = number.toString();
+   var prefixWidth = width - s.length;
+   if (prefixWidth>0){
+      for (var i=1; i<=prefixWidth; i++) s = " " + s;
+   }
+   return s;
+}
+
+function nsieve(m, isPrime){
+   var i, k, count;
+
+   for (i=2; i<=m; i++) { isPrime[i] = true; }
+   count = 0;
+
+   for (i=2; i<=m; i++){
+      if (isPrime[i]) {
+         for (k=i+i; k<=m; k+=i) isPrime[k] = false;
+         count++;
+      }
+   }
+   return count;
+}
+
+
+function runTest(){ startTest("sunspider-access-nsieve", 'efeee6f3');
+	var count;
+	test( "N-Sieve", function(){
+		for ( var i = 1; i <= 2; i++ ) {
+	   	var m = (1<<i)*10000;
+	   	var flags = Array(m+1);
+			count = nsieve(m,flags);
+		}
+	});
+	endTest();
+//	return count;
+};
+	</script>
+
+</head>
+<body>
+	<h2 id='title1'>SunSpider Prime Number Computation Test</h2><br/>
+	<button class="run1" style="display:block;margin-top:40px;height:40px;width:150px;font-size:20px;" >Start Test</button><label id="label1" style="display:auto;"></label><br/>
+	
+	<script type="text/javascript" >
+		$(".run1").click(function(event){
+				var startTime=new Date().getTime();
+				runTest();
+				var timeConsume=new Date().getTime()-startTime;
+				document.getElementById("label1").innerHTML="Time Consuming:"+timeConsume.toString()+"ms";
+		});
+		$('title').html($("#title1").html());
+	</script>
+
+</body></html>
+	

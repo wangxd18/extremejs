@@ -1,0 +1,353 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+			<style type="text/css">
+			body {font-family:arial;}
+			tr {border:2px #444 solid;test-align: center;height:15px;}
+			td {border:2px #444 solid;text-align:center;width:20px;height:20px;font-size:medium;}
+            .white {background:url('imgs/white.png') no-repeat center center;}
+            .black {background:url('imgs/black.png') no-repeat center center;}
+			table {border-collapse:collapse;}
+            #gobangtable{background-color:#D9983F;}
+			button {height:24px}
+			span#output,span#debug{ display:block; margin: 10px auto;font-weight:bold;}
+			div#outputdiv{display:block;margin:2px auto;width:640px;}
+			</style>
+	<title>Gobang</title>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="/migrator/profiler/appProfiler.js"></script>
+	<script type="text/javascript" src="/migrator/examples/gobang/gobang.js"></script>
+</head>
+<body >
+	<div class="gobang">
+		<h1 align="center" > Gobang! </h1>
+		<div align="center">
+			<p style = "line-height:2px">Level:<input type="text" id='input' value="1" dojoAttachPoint="inputnode" size="3" style="margin-left:5px;"/>
+			<button id='start' dojoAttachEvent="onclick:onInit">Start!</button>
+			<button id='autorun'> Autorun </button>
+			<button id='switch' dojoAttachEvent="onclick:onSwitch">Switch</button>
+			<button id='regret' dojoAttachPoint="regretnode" dojoAttachEvent="onclick:onRegret">Regret(0)</button>
+			<button id='help' dojoAttachPoint="helpnode" dojoAttachEvent="onclick:onHelp">Help(0)</button>
+		</div>
+		<table id="gobangtable" align="center" dojoAttachEvent="onclick:nextStep">
+				<tr>
+				<td>&nbsp;</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td>
+				<td>10</td><td>11</td><td>12</td><td>13</td><td>14</td>
+				</tr>
+				<tr>
+				<td>0</td>
+				<td id="s000">&nbsp;</td>
+				<td id="s001">&nbsp;</td>
+				<td id="s002">&nbsp;</td>
+				<td id="s003">&nbsp;</td>
+				<td id="s004">&nbsp;</td>
+				<td id="s005">&nbsp;</td>
+				<td id="s006">&nbsp;</td>
+				<td id="s007">&nbsp;</td>
+				<td id="s008">&nbsp;</td>
+				<td id="s009">&nbsp;</td>
+				<td id="s010">&nbsp;</td>
+				<td id="s011">&nbsp;</td>
+				<td id="s012">&nbsp;</td>
+				<td id="s013">&nbsp;</td>
+				<td id="s014">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td id="s015">&nbsp;</td>
+				<td id="s016">&nbsp;</td>
+				<td id="s017">&nbsp;</td>
+				<td id="s018">&nbsp;</td>
+				<td id="s019">&nbsp;</td>
+				<td id="s020">&nbsp;</td>
+				<td id="s021">&nbsp;</td>
+				<td id="s022">&nbsp;</td>
+				<td id="s023">&nbsp;</td>
+				<td id="s024">&nbsp;</td>
+				<td id="s025">&nbsp;</td>
+				<td id="s026">&nbsp;</td>
+				<td id="s027">&nbsp;</td>
+				<td id="s028">&nbsp;</td>
+				<td id="s029">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td id="s030">&nbsp;</td>
+				<td id="s031">&nbsp;</td>
+				<td id="s032">&nbsp;</td>
+				<td id="s033">&nbsp;</td>
+				<td id="s034">&nbsp;</td>
+				<td id="s035">&nbsp;</td>
+				<td id="s036">&nbsp;</td>
+				<td id="s037">&nbsp;</td>
+				<td id="s038">&nbsp;</td>
+				<td id="s039">&nbsp;</td>
+				<td id="s040">&nbsp;</td>
+				<td id="s041">&nbsp;</td>
+				<td id="s042">&nbsp;</td>
+				<td id="s043">&nbsp;</td>
+				<td id="s044">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td id="s045">&nbsp;</td>
+				<td id="s046">&nbsp;</td>
+				<td id="s047">&nbsp;</td>
+				<td id="s048">&nbsp;</td>
+				<td id="s049">&nbsp;</td>
+				<td id="s050">&nbsp;</td>
+				<td id="s051">&nbsp;</td>
+				<td id="s052">&nbsp;</td>
+				<td id="s053">&nbsp;</td>
+				<td id="s054">&nbsp;</td>
+				<td id="s055">&nbsp;</td>
+				<td id="s056">&nbsp;</td>
+				<td id="s057">&nbsp;</td>
+				<td id="s058">&nbsp;</td>
+				<td id="s059">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td id="s060">&nbsp;</td>
+				<td id="s061">&nbsp;</td>
+				<td id="s062">&nbsp;</td>
+				<td id="s063">&nbsp;</td>
+				<td id="s064">&nbsp;</td>
+				<td id="s065">&nbsp;</td>
+				<td id="s066">&nbsp;</td>
+				<td id="s067">&nbsp;</td>
+				<td id="s068">&nbsp;</td>
+				<td id="s069">&nbsp;</td>
+				<td id="s070">&nbsp;</td>
+				<td id="s071">&nbsp;</td>
+				<td id="s072">&nbsp;</td>
+				<td id="s073">&nbsp;</td>
+				<td id="s074">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td id="s075">&nbsp;</td>
+				<td id="s076">&nbsp;</td>
+				<td id="s077">&nbsp;</td>
+				<td id="s078">&nbsp;</td>
+				<td id="s079">&nbsp;</td>
+				<td id="s080">&nbsp;</td>
+				<td id="s081">&nbsp;</td>
+				<td id="s082">&nbsp;</td>
+				<td id="s083">&nbsp;</td>
+				<td id="s084">&nbsp;</td>
+				<td id="s085">&nbsp;</td>
+				<td id="s086">&nbsp;</td>
+				<td id="s087">&nbsp;</td>
+				<td id="s088">&nbsp;</td>
+				<td id="s089">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>6</td>
+				<td id="s090">&nbsp;</td>
+				<td id="s091">&nbsp;</td>
+				<td id="s092">&nbsp;</td>
+				<td id="s093">&nbsp;</td>
+				<td id="s094">&nbsp;</td>
+				<td id="s095">&nbsp;</td>
+				<td id="s096">&nbsp;</td>
+				<td id="s097">&nbsp;</td>
+				<td id="s098">&nbsp;</td>
+				<td id="s099">&nbsp;</td>
+				<td id="s100">&nbsp;</td>
+				<td id="s101">&nbsp;</td>
+				<td id="s102">&nbsp;</td>
+				<td id="s103">&nbsp;</td>
+				<td id="s104">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>7</td>
+				<td id="s105">&nbsp;</td>
+				<td id="s106">&nbsp;</td>
+				<td id="s107">&nbsp;</td>
+				<td id="s108">&nbsp;</td>
+				<td id="s109">&nbsp;</td>
+				<td id="s110">&nbsp;</td>
+				<td id="s111">&nbsp;</td>
+				<td id="s112">&nbsp;</td>
+				<td id="s113">&nbsp;</td>
+				<td id="s114">&nbsp;</td>
+				<td id="s115">&nbsp;</td>
+				<td id="s116">&nbsp;</td>
+				<td id="s117">&nbsp;</td>
+				<td id="s118">&nbsp;</td>
+				<td id="s119">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>8</td>
+				<td id="s120">&nbsp;</td>
+				<td id="s121">&nbsp;</td>
+				<td id="s122">&nbsp;</td>
+				<td id="s123">&nbsp;</td>
+				<td id="s124">&nbsp;</td>
+				<td id="s125">&nbsp;</td>
+				<td id="s126">&nbsp;</td>
+				<td id="s127">&nbsp;</td>
+				<td id="s128">&nbsp;</td>
+				<td id="s129">&nbsp;</td>
+				<td id="s130">&nbsp;</td>
+				<td id="s131">&nbsp;</td>
+				<td id="s132">&nbsp;</td>
+				<td id="s133">&nbsp;</td>
+				<td id="s134">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>9</td>
+				<td id="s135">&nbsp;</td>
+				<td id="s136">&nbsp;</td>
+				<td id="s137">&nbsp;</td>
+				<td id="s138">&nbsp;</td>
+				<td id="s139">&nbsp;</td>
+				<td id="s140">&nbsp;</td>
+				<td id="s141">&nbsp;</td>
+				<td id="s142">&nbsp;</td>
+				<td id="s143">&nbsp;</td>
+				<td id="s144">&nbsp;</td>
+				<td id="s145">&nbsp;</td>
+				<td id="s146">&nbsp;</td>
+				<td id="s147">&nbsp;</td>
+				<td id="s148">&nbsp;</td>
+				<td id="s149">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>10</td>
+				<td id="s150">&nbsp;</td>
+				<td id="s151">&nbsp;</td>
+				<td id="s152">&nbsp;</td>
+				<td id="s153">&nbsp;</td>
+				<td id="s154">&nbsp;</td>
+				<td id="s155">&nbsp;</td>
+				<td id="s156">&nbsp;</td>
+				<td id="s157">&nbsp;</td>
+				<td id="s158">&nbsp;</td>
+				<td id="s159">&nbsp;</td>
+				<td id="s160">&nbsp;</td>
+				<td id="s161">&nbsp;</td>
+				<td id="s162">&nbsp;</td>
+				<td id="s163">&nbsp;</td>
+				<td id="s164">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>11</td>
+				<td id="s165">&nbsp;</td>
+				<td id="s166">&nbsp;</td>
+				<td id="s167">&nbsp;</td>
+				<td id="s168">&nbsp;</td>
+				<td id="s169">&nbsp;</td>
+				<td id="s170">&nbsp;</td>
+				<td id="s171">&nbsp;</td>
+				<td id="s172">&nbsp;</td>
+				<td id="s173">&nbsp;</td>
+				<td id="s174">&nbsp;</td>
+				<td id="s175">&nbsp;</td>
+				<td id="s176">&nbsp;</td>
+				<td id="s177">&nbsp;</td>
+				<td id="s178">&nbsp;</td>
+				<td id="s179">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>12</td>
+				<td id="s180">&nbsp;</td>
+				<td id="s181">&nbsp;</td>
+				<td id="s182">&nbsp;</td>
+				<td id="s183">&nbsp;</td>
+				<td id="s184">&nbsp;</td>
+				<td id="s185">&nbsp;</td>
+				<td id="s186">&nbsp;</td>
+				<td id="s187">&nbsp;</td>
+				<td id="s188">&nbsp;</td>
+				<td id="s189">&nbsp;</td>
+				<td id="s190">&nbsp;</td>
+				<td id="s191">&nbsp;</td>
+				<td id="s192">&nbsp;</td>
+				<td id="s193">&nbsp;</td>
+				<td id="s194">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>13</td>
+				<td id="s195">&nbsp;</td>
+				<td id="s196">&nbsp;</td>
+				<td id="s197">&nbsp;</td>
+				<td id="s198">&nbsp;</td>
+				<td id="s199">&nbsp;</td>
+				<td id="s200">&nbsp;</td>
+				<td id="s201">&nbsp;</td>
+				<td id="s202">&nbsp;</td>
+				<td id="s203">&nbsp;</td>
+				<td id="s204">&nbsp;</td>
+				<td id="s205">&nbsp;</td>
+				<td id="s206">&nbsp;</td>
+				<td id="s207">&nbsp;</td>
+				<td id="s208">&nbsp;</td>
+				<td id="s209">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>14</td>
+				<td id="s210">&nbsp;</td>
+				<td id="s211">&nbsp;</td>
+				<td id="s212">&nbsp;</td>
+				<td id="s213">&nbsp;</td>
+				<td id="s214">&nbsp;</td>
+				<td id="s215">&nbsp;</td>
+				<td id="s216">&nbsp;</td>
+				<td id="s217">&nbsp;</td>
+				<td id="s218">&nbsp;</td>
+				<td id="s219">&nbsp;</td>
+				<td id="s220">&nbsp;</td>
+				<td id="s221">&nbsp;</td>
+				<td id="s222">&nbsp;</td>
+				<td id="s223">&nbsp;</td>
+				<td id="s224">&nbsp;</td>
+			</tr>
+		</table>
+		<div id='outputdiv'>
+			<span id='output' dojoAttachPoint="outputnode" align="center">Press go to start!</span>
+			<span id='debug' dojoAttachPoint="debuginfo" align="center"></span>
+		</div>
+		</p>
+	</div>
+<script type="text/javascript">
+var cn_display = true;
+var testSteps=["s096", "s097", "s083", "s128", "s114", "s109", "s140", "s084", "s094", "s174"];
+function goNext(i){
+	Gobang.nextStep(testSteps[i++]);
+	if( i<testSteps.length)
+		setTimeout("goNext("+i+")",100);
+}
+
+function autorunTenStep(){
+	goNext(0);
+}
+
+$().ready(function(){
+	inputnode = document.getElementById('input');
+	outputnode=document.getElementById('output');
+	regretnode=document.getElementById('regret');
+	helpnode=document.getElementById('help');
+	debuginfo=document.getElementById('debug');
+	profileinfo=document.getElementById('profile');
+
+	$('#start').click(function(e){Gobang.onInit()});
+	$('#regret').click(function(e){Gobang.onRegret()});
+	$('#switch').click(function(e){Gobang.onSwitch()});
+	$('#help').click(function(e){Gobang.onHelp()});
+	$('#input').click(function(e){Gobang.oninput()});
+	$('#autorun').click(function(e){autorunTenStep()}).hide();
+	$("td[id^=s]").click(function(e){
+		Gobang.nextStep(this.id);
+	});
+});
+
+</script>
+
+</body>
+</html>

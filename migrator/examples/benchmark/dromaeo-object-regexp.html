@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <title>Dromaeo Regular Expressions Test</title>
+	<script type="text/javascript" src="/jquery/json.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="/migrator/migrator.php?app=benchmark_re"></script>
+	<script type="text/javascript" >
+function test(s,f){
+f();
+}
+function prep(f){
+f();
+}
+
+
+function runTest(){
+var str = [], tmp, ret, re, testStrings = [];
+var i = 65536;
+
+function randomChar(){
+	return String.fromCharCode( (25 * Math.random()) + 97 );
+}
+
+for ( var i = 0; i < 16384; i++ )
+	str.push( randomChar() );
+
+str = str.join("");
+str += str;
+str += str;
+
+function generateTestStrings(count){
+	var t, nest;
+	if ( testStrings.length >= count )
+		return testStrings.slice(0, count);
+	for ( var i = testStrings.length; i < count; i++ ) {
+		t = randomChar() + str + randomChar();
+		nest = Math.floor(4 * Math.random());
+		for ( var j = 0; j < nest; j++ ) {
+			t = randomChar() + t + randomChar();
+		}
+		for ( var j = 0; j < t.length; j += 100 ) {
+			ret = t[j];
+			ret = t.substring(j, j + 100);
+		}
+		testStrings[i] = t;
+	}
+	return testStrings;
+}
+
+		re = /(?:)/;
+		tmp = generateTestStrings(30);
+		for ( var i = 0; i < 30; i++ )
+			ret = tmp[i].split( re );
+		re = /a/;
+		tmp = generateTestStrings(30);
+		for ( var i = 0; i < 30; i++ )
+			ret = tmp[i].split( re );
+		re = /.*/;
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = tmp[i].split( re );
+		re = /aaaaaaaaaa/g;
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = tmp[i].match( re );
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = re.test( tmp[i] );
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "asdfasdfasdf" );
+		re = new RegExp("aaaaaaaaaa", "g");
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = tmp[i].match( re );
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = re.test( tmp[i] );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "asdfasdfasdf" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, function(all){
+			return "asdfasdfasdf";
+		});
+		re = /a.*a/;
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = tmp[i].match( re );
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = re.test( tmp[i] );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "asdfasdfasdf" );
+		re = new RegExp("aaaaaaaaaa", "g");
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = tmp[i].match( re );
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = re.test( tmp[i] );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "asdfasdfasdf" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, function(all){
+			return "asdfasdfasdf";
+		});
+		re = /aa(b)aa/g;
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = tmp[i].match( re );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "asdfasdfasdf" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, "asdf\\1asdfasdf" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, function(all,capture){
+			return "asdf" + capture + "asdfasdf";
+		});
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( re, function(all,capture){
+			return capture.toUpperCase();
+		});
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = tmp[i].match( /aaaaaaaaaa/g );
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = (/aaaaaaaaaa/g).test( tmp[i] );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( /aaaaaaaaaa/g, "" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( /aaaaaaaaaa/g, "asdfasdfasdf" );
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = tmp[i].match( new RegExp("aaaaaaaaaa", "g") );
+		tmp = generateTestStrings(100);
+		for ( var i = 0; i < 100; i++ )
+			ret = (new RegExp("aaaaaaaaaa", "g")).test( tmp[i] );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( new RegExp("aaaaaaaaaa", "g"), "" );
+		tmp = generateTestStrings(50);
+		for ( var i = 0; i < 50; i++ )
+			ret = tmp[i].replace( new RegExp("aaaaaaaaaa", "g"), "asdfasdfasdf" );
+};
+
+	</script>
+
+</head>
+<body>
+	<h2>Dromaeo Regular Expressions Test</h2><br/>
+	<button class="run1" style="display:block;margin-top:40px;height:40px;width:150px;font-size:20px;" >Start Test</button><label id="label1" style="display:auto;"></label><br/>
+	
+	<script type="text/javascript" >
+		$(".run1").click(function(event){
+				var startTime=new Date().getTime();
+				runTest();
+				var timeConsume=new Date().getTime()-startTime;
+				document.getElementById("label1").innerHTML="Time Consuming:"+timeConsume.toString()+"ms";
+		});
+
+	</script>
+
+</body></html>
+
