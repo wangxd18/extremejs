@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Extremejs : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Extremejs</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/wangxd18/extremejs">View on GitHub</a>
+
+          <h1 id="project_title">Extremejs</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/wangxd18/extremejs/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/wangxd18/extremejs/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>The backend of ExtremeJS works on linux. The following installing step works fine on ubuntu10.10. Apache and php are required to run examples.</p>
+
+<h4>1.Install v8 and nginx.</h4>
+
+<ul>
+<li>Download v8 source code from <a href="https://developers.google.com/v8/build">here</a>.</li>
+<li>Compile source code.</li>
+<li>Copy libv8.so and libv8preparser.so to /usr/lib</li>
+</ul><p><code>cp libv8.so libv8preparser.so /usr/lib</code></p>
+
+<h4>2.Set ngxv8 module's config</h4>
+
+<p><code>cd extremejs/ngxv8</code></p>
+
+<p>Use any text editor you like to open <em>config</em> file in the directory. Set <em>CORE_INCS</em> and <em>CORE_LIBS</em> as the <em>v8</em> source code's directory. Then save and quit.</p>
+
+<p>Open <em>v8js.h_，look for _fopen_，set _fopen</em>'s arguments to "path/to/this/ngxv8/directory/init.txt".</p>
+
+<h4>3.Download and compile nginx。</h4>
+
+<p>Download nginx source code from <a href="http://nginx.org/download/">here</a>. Extract and then enter the source code directory. Run the following steps to config and install nginx with ngxv8 module.</p>
+
+<pre><code>./configure 
+  --prefix=/home/username/local/nginx
+  --add-module=/home/username/local/extremejs/ngxv8
+  --with-ld-opt="-lstdc++ -ldl -lpthread"
+  --sbin-path=/usr/local/sbin
+  --with-cc-opt="-Wno-deprecated -fomit-frame-pointer -pthread"
+  --without-http_rewrite_module
+  --without-http_fastcgi_module
+  --without-http_scgi_module
+  --without-http_proxy_module
+  --without-http_split_clients_module
+  --without-http_uwsgi_module
+  --without-http_gzip_module
+</code></pre>
+
+<p>Replace <em>--prefix</em> with the path you want to install nginx. Replace <em>--add-module</em> with the <em>ngxv8</em>'s path in step 2.
+After configuration, compile and install nginx.</p>
+
+<pre><code>make
+make install
+</code></pre>
+
+<p>When installed, copy <em>nginx.conf</em> to /path/to/nginx/conf.</p>
+
+<p>Start nginx。</p>
+
+<p><code>sudo /usr/local/sbin/nginx;</code></p>
+
+<h4>4.Run examples.</h4>
+
+<p>Enter apache's htdocs：</p>
+
+<p><code>cd /path/to/your/apache/htdocs;</code></p>
+
+<p>Replace /path/to/your/apache/ with your apache path.</p>
+
+<p>Set symbolic link to extremejs/migrator or copy it. </p>
+
+<p><code>ln -s /path/to/your/extremejs/migrator</code></p>
+
+<p>Enter migrator directory,open <em>migrator.js</em>.</p>
+
+<p>Look up for <em>domain : '192.168.1.239'</em>,replace the ip location with your server domain or ip.</p>
+
+<h4>5. Start apache and run examples.</h4>
+
+<p>Visit <a href="http://yourdomain/migrator/examples/gobang/gobangc.html">http://yourdomain/migrator/examples/gobang/gobangc.html</a> and <a href="http://yourdomain/migrator/examples/gobang/gobang.html">http://yourdomain/migrator/examples/gobang/gobang.html</a>.</p>
+
+<p>Replace <em>yourdomain</em> with your server domain or ip. gobang.html is gobang game with extremejs working. gobangc.html is the local version.</p>
+
+<p>Click start to play gobang game. Enjoy it!</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Extremejs maintained by <a href="https://github.com/wangxd18">wangxd18</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
